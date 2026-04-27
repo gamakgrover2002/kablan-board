@@ -1,48 +1,18 @@
 import { Filter, Search, SlidersHorizontal } from "lucide-react";
 import KanbanColumn from "./KanbanColumn";
 import KanbanCard from "./KanbanCard";
+import { useIsMobile } from "@/hooks/use-mobile";
+import { useSelector } from "react-redux";
+import { selectBoard } from "@/states/board/boardSlice";
 
-const columns = [
-  {
-    title: "Backlog",
-    colorClass: "bg-column-backlog",
-    dotColor: "bg-muted-foreground/50",
-    cards: [
-      { id: "KAN-01", title: "Research competitor onboarding flows", priority: "low" as const, tags: ["feature" as const], assignee: { initials: "AK", color: "hsl(220, 70%, 50%)" }, comments: 2 },
-      { id: "KAN-06", title: "Audit current accessibility compliance", priority: "medium" as const, tags: ["improvement" as const], comments: 1, attachments: 3 },
-    ],
-  },
-  {
-    title: "To Do",
-    colorClass: "bg-column-todo",
-    dotColor: "bg-tag-feature",
-    cards: [
-      { id: "KAN-02", title: "Design new settings page layout", priority: "medium" as const, tags: ["feature" as const], assignee: { initials: "MR", color: "hsl(270, 60%, 55%)" }, attachments: 2 },
-      { id: "KAN-07", title: "Fix date picker timezone bug", priority: "high" as const, tags: ["bug" as const], assignee: { initials: "JL", color: "hsl(0, 72%, 51%)" }, comments: 5 },
-      { id: "KAN-09", title: "Write API documentation for v2 endpoints", priority: "low" as const, tags: ["improvement" as const], comments: 1 },
-    ],
-  },
-  {
-    title: "In Progress",
-    colorClass: "bg-column-progress",
-    dotColor: "bg-yellow-500",
-    cards: [
-      { id: "KAN-03", title: "Implement drag-and-drop card reordering", priority: "high" as const, tags: ["feature" as const], assignee: { initials: "TS", color: "hsl(145, 50%, 40%)" }, comments: 8, attachments: 1 },
-      { id: "KAN-08", title: "Optimize image loading performance", priority: "medium" as const, tags: ["improvement" as const], assignee: { initials: "AK", color: "hsl(220, 70%, 50%)" } },
-    ],
-  },
-  {
-    title: "Done",
-    colorClass: "bg-column-done",
-    dotColor: "bg-green-500",
-    cards: [
-      { id: "KAN-04", title: "Set up CI/CD pipeline for staging", priority: "medium" as const, tags: ["improvement" as const], assignee: { initials: "MR", color: "hsl(270, 60%, 55%)" }, comments: 3, attachments: 2 },
-      { id: "KAN-05", title: "Fix login redirect loop on Safari", priority: "high" as const, tags: ["bug" as const], assignee: { initials: "JL", color: "hsl(0, 72%, 51%)" }, comments: 4 },
-    ],
-  },
-];
+
+
 
 const KanbanBoard = () => {
+  const isMobile = useIsMobile();
+  const boardColumns = useSelector(selectBoard);
+  console.log(boardColumns);
+  
   return (
     <div className="flex h-screen flex-col bg-background">
       {/* Header */}
@@ -76,9 +46,25 @@ const KanbanBoard = () => {
         </div>
       </header>
 
-      {/* Board */}
-      <div className="flex flex-1 gap-4 overflow-x-auto p-6">
-        {columns.map((col) => (
+      {!boardColumns && (
+        <div>
+          <p className="text-center text-muted-foreground mt-10">
+            No columns found. Please Craete your columns by going to following page.
+          </p>
+          <div className="flex justify-center mt-4">
+            <a
+              href="/columns"
+              className="rounded-lg bg-primary px-4 py-2 text-sm text-white transition-colors hover:bg-primary/90"
+            >
+              Create Columns
+            </a>
+            </div>
+            </div>
+      )}
+
+    
+      <div className={`flex ${isMobile? "flex-col":"flex-1"} gap-4 overflow-x-auto p-6`}>
+        {boardColumns && boardColumns.map((col) => (
           <KanbanColumn
             key={col.title}
             title={col.title}
