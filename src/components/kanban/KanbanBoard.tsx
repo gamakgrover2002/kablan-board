@@ -53,7 +53,7 @@ const KanbanBoard = () => {
           </p>
           <div className="flex justify-center mt-4">
             <a
-              href="/columns"
+              href="/create-board"
               className="rounded-lg bg-primary px-4 py-2 text-sm text-white transition-colors hover:bg-primary/90"
             >
               Create Columns
